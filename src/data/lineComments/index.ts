@@ -13,6 +13,7 @@ import { evans } from './evans.ts'
 import { berlin } from './berlin.ts'
 import { marshall } from './marshall.ts'
 import { cerrada } from './cerrada.ts'
+import { trampasRuy } from './trampasRuy.ts'
 
 export const lineComments: Record<string, LineComments> = {
   italiana,
@@ -21,4 +22,5 @@ export const lineComments: Record<string, LineComments> = {
   berlin,
   marshall,
   cerrada,
+  'trampas-ruy': trampasRuy,
 }
