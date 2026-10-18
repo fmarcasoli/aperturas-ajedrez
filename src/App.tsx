@@ -4,12 +4,14 @@ import { buildExercises } from './lib/exercises.ts'
 import { useProgress } from './lib/progress.ts'
 import { ExerciseMode } from './components/ExerciseMode.tsx'
 import { LineMode } from './components/LineMode.tsx'
+import { LessonPlayer, LessonsTab } from './components/Lessons.tsx'
+import { intro, lessonsByOpening } from './data/lessons/index.ts'
 
-type Mode = 'ejercicios' | 'lineas'
+type Mode = 'ejercicios' | 'lineas' | 'videos'
 
 function parseHash(): { id?: string; mode: Mode } {
   const [, id, mode] = window.location.hash.replace(/^#\/?/, '/').split('/')
-  return { id: id || undefined, mode: mode === 'lineas' ? 'lineas' : 'ejercicios' }
+  return { id: id || undefined, mode: mode === 'lineas' || mode === 'videos' ? mode : 'ejercicios' }
 }
 
 export default function App() {
@@ -31,6 +33,21 @@ export default function App() {
     window.location.hash = id ? `/${id}/${mode}` : '/'
   }
 
+  if (route.id === 'intro')
+    return (
+      <div className="app">
+        <header className="topbar">
+          <button className="back" onClick={() => go()} aria-label="Volver">←</button>
+          <div className="topbar-title">
+            <h1>Video de introducción</h1>
+          </div>
+        </header>
+        <main>
+          <LessonPlayer lesson={intro} onBack={() => go()} backLabel="← Inicio" />
+        </main>
+      </div>
+    )
+
   if (!opening) return <Home progress={progress.exercises} linesDone={progress.lines} onOpen={(id) => go(id)} />
 
   return (
@@ -46,15 +63,20 @@ export default function App() {
           Ejercicios
         </button>
         <button className={route.mode === 'lineas' ? 'on' : ''} onClick={() => go(opening.id, 'lineas')}>
-          Líneas completas
+          Líneas
+        </button>
+        <button className={route.mode === 'videos' ? 'on' : ''} onClick={() => go(opening.id, 'videos')}>
+          🎬 Videos
         </button>
       </nav>
       <main>
-        {route.mode === 'ejercicios' ? (
+        {route.mode === 'ejercicios' && (
           <ExerciseMode key={opening.id} opening={opening} stats={progress.exercises} onRecord={recordExercise} />
-        ) : (
+        )}
+        {route.mode === 'lineas' && (
           <LineMode key={opening.id} opening={opening} linesDone={progress.lines} onComplete={recordLine} />
         )}
+        {route.mode === 'videos' && <LessonsTab key={opening.id} lessons={lessonsByOpening[opening.id] ?? []} />}
       </main>
       <footer className="foot">
         <button
@@ -104,6 +126,13 @@ function Home({
           </p>
         </div>
       </header>
+      <a className="intro-card" href="#/intro">
+        <span className="lesson-play">▶</span>
+        <span>
+          <b>Empezá acá: los principios de las aperturas</b>
+          <span className="small muted"> Video con voz · cada apertura tiene además su video general y videos cortos.</span>
+        </span>
+      </a>
       <div className="grid">
         {cards.map(({ o, total, solved, lines, done }) => (
           <button key={o.id} className="card" onClick={() => onOpen(o.id)}>
@@ -114,7 +143,7 @@ function Home({
             <p className="card-desc">{o.description}</p>
             <div className="card-meta">
               <span>{total} ejercicios</span>
-              <span>{done}/{lines} líneas</span>
+              <span>{done}/{lines} líneas · 🎬 {lessonsByOpening[o.id]?.length ?? 0}</span>
             </div>
             <div className="progress">
               <div style={{ width: `${(solved / total) * 100}%` }} />

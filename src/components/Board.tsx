@@ -15,11 +15,13 @@ interface Props {
   hintSquare?: string
   wrongSquare?: string
   arrows?: Arrow[]
+  /** Casillas resaltadas (lecciones). */
+  marks?: string[]
 }
 
 const LAST = 'rgba(255, 214, 0, 0.38)'
 
-export function Board({ fen, orientation, interactive, onMove, lastMove, hintSquare, wrongSquare, arrows }: Props) {
+export function Board({ fen, orientation, interactive, onMove, lastMove, hintSquare, wrongSquare, arrows, marks }: Props) {
   const [selected, setSelected] = useState<Square | null>(null)
 
   useEffect(() => {
@@ -31,6 +33,7 @@ export function Board({ fen, orientation, interactive, onMove, lastMove, hintSqu
 
   const styles: Record<string, Record<string, string>> = {}
   if (lastMove) for (const sq of lastMove) styles[sq] = { background: LAST }
+  if (marks) for (const sq of marks) styles[sq] = { boxShadow: 'inset 0 0 0 4px rgba(234, 179, 8, 0.95)', background: 'rgba(234, 179, 8, 0.28)' }
   if (hintSquare) styles[hintSquare] = { boxShadow: 'inset 0 0 0 4px var(--hint)', background: 'rgba(80,160,255,.35)' }
   if (selected) styles[selected] = { background: 'rgba(20, 85, 30, 0.5)' }
   for (const t of targets) {
