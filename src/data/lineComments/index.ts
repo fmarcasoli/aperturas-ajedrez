@@ -10,9 +10,13 @@ export type LineComments = Record<string, Record<string, Comment>>
 import { italiana } from './italiana.ts'
 import { dosCaballos } from './dosCaballos.ts'
 import { evans } from './evans.ts'
+import { berlin } from './berlin.ts'
+import { marshall } from './marshall.ts'
 
 export const lineComments: Record<string, LineComments> = {
   italiana,
   'dos-caballos': dosCaballos,
   evans,
+  berlin,
+  marshall,
 }

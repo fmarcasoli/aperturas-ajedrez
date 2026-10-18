@@ -142,7 +142,7 @@ export const openings: Opening[] = [
       { name: 'Anti-Berlín: 4.d3 d6 con fianchetto', moves: `${BERLIN} 4.d3 d6 5.c3 g6 6.O-O Bg7 7.Re1 O-O 8.Nbd2 Nd7 9.Nf1 Nc5 10.Bxc6 bxc6 11.d4 exd4 12.cxd4 Ne6 13.Be3 Rb8 14.b3 c5 15.dxc5 dxc5 16.Qxd8 Rxd8 17.Rac1` },
       { name: 'Anti-Berlín: 6...d5', moves: `${BERLIN} 4.d3 Bc5 5.c3 O-O 6.O-O d5 7.Nbd2 dxe4 8.dxe4 Qe7 9.Qc2 a5 10.a4 h6 11.Nc4 Be6 12.Ne3 Bxe3 13.Bxe3 Ng4 14.Bd2 Rad8 15.h3 Nf6` },
       { name: 'Anti-Berlín: 7.Nbd2 a6 8.Bxc6', moves: `${BERLIN} 4.d3 Bc5 5.c3 O-O 6.O-O d6 7.Nbd2 a6 8.Bxc6 bxc6 9.Re1 Re8 10.h3 Bb6 11.Nf1 h6 12.Ng3 c5 13.Nh4 Be6 14.Nhf5 Bxf5 15.Nxf5 d5 16.Qf3 dxe4 17.dxe4 c4` },
-      { name: 'Berlín con 4...Bc5', moves: `${BERLIN} 4.O-O Bc5 5.c3 O-O 6.d4 Bb6 7.Bg5 h6 8.Bh4 d6 9.a4 a5 10.Re1 exd4 11.cxd4 g5 12.Bg3 Nxd4` },
+      { name: 'Berlín con 4...Bc5', moves: `${BERLIN} 4.O-O Bc5 5.c3 O-O 6.d4 Bb6 7.Bg5 h6 8.Bh4 d6 9.a4 a5 10.Re1 exd4 11.cxd4 g5 12.Bg3 Bg4 13.Nc3` },
       { name: 'Anti-Berlín: 4.d3 Bc5 5.O-O', moves: `${BERLIN} 4.d3 Bc5 5.O-O d6 6.c3 O-O 7.Nbd2 a6 8.Ba4 Ba7 9.h3 Ne7 10.Re1 Ng6 11.Nf1 c6 12.Bc2 h6 13.Ng3 Re8 14.d4 Be6 15.Be3 Qc7 16.Qd2 Rad8 17.Rad1 d5` },
       { name: 'Final de Berlín: 9...Ke8 10.h3 Be7', moves: `${BERLIN} 4.O-O Nxe4 5.d4 Nd6 6.Bxc6 dxc6 7.dxe5 Nf5 8.Qxd8+ Kxd8 9.Nc3 Ke8 10.h3 Be7 11.b3 Be6 12.Bb2 Rd8 13.Rad1 h5 14.Ne2 a5 15.c4 a4` },
       { name: 'Berlín: 6.dxe5 Nxb5', moves: `${BERLIN} 4.O-O Nxe4 5.d4 Nd6 6.dxe5 Nxb5 7.a4 Nbd4 8.Nxd4 Nxd4 9.Qxd4 d5 10.exd6 Qxd6 11.Qe4+ Qe6 12.Qd4 Qd6 13.Qe3+ Qe6 14.Qxe6+ Bxe6 15.Nc3 Bd6 16.Nb5 Ke7 17.Nxd6 cxd6` },
