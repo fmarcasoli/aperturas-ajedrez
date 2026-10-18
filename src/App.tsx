@@ -4,17 +4,19 @@ import { buildExercises } from './lib/exercises.ts'
 import { useProgress } from './lib/progress.ts'
 import { ExerciseMode } from './components/ExerciseMode.tsx'
 import { LineMode } from './components/LineMode.tsx'
+import { PlayMode } from './components/PlayMode.tsx'
+import { getLines } from './lib/exercises.ts'
 import { LessonPlayer, LessonsTab } from './components/Lessons.tsx'
 import { intro, lessonsByOpening } from './data/lessons/index.ts'
 import { lineLessons } from './lib/lineLessons.ts'
 
-type Mode = 'ejercicios' | 'lineas' | 'videos'
+type Mode = 'ejercicios' | 'lineas' | 'jugar' | 'videos'
 
 function parseHash(): { id?: string; mode: Mode; lesson?: string } {
   const [, id, mode, lesson] = window.location.hash.replace(/^#\/?/, '/').split('/')
   return {
     id: id || undefined,
-    mode: mode === 'lineas' || mode === 'videos' ? mode : 'ejercicios',
+    mode: mode === 'lineas' || mode === 'videos' || mode === 'jugar' ? mode : 'ejercicios',
     lesson: lesson ? decodeURIComponent(lesson) : undefined,
   }
 }
@@ -70,6 +72,9 @@ export default function App() {
         <button className={route.mode === 'lineas' ? 'on' : ''} onClick={() => go(opening.id, 'lineas')}>
           Líneas
         </button>
+        <button className={route.mode === 'jugar' ? 'on' : ''} onClick={() => go(opening.id, 'jugar')}>
+          ♟ Jugar
+        </button>
         <button className={route.mode === 'videos' ? 'on' : ''} onClick={() => go(opening.id, 'videos')}>
           🎬 Videos
         </button>
@@ -86,6 +91,17 @@ export default function App() {
             onComplete={recordLine}
             onVideo={(lineId) => {
               window.location.hash = `/${opening.id}/videos/${encodeURIComponent(`linea:${lineId}`)}`
+            }}
+          />
+        )}
+        {route.mode === 'jugar' && (
+          <PlayMode
+            key={opening.id}
+            opening={opening}
+            onRecord={recordExercise}
+            onVideo={(name) => {
+              const line = getLines(opening).find((l) => l.name === name)
+              if (line) window.location.hash = `/${opening.id}/videos/${encodeURIComponent(`linea:${line.id}`)}`
             }}
           />
         )}

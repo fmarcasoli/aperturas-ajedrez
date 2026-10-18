@@ -16,6 +16,8 @@ export interface TreeMove {
   nextFen: string
   lineName: string
   lineNote?: string
+  /** Nombres de todas las líneas que pasan por esta jugada. */
+  lines: string[]
 }
 
 export interface TreeNode {
@@ -119,6 +121,7 @@ export function buildTree(opening: Opening): OpeningTree {
       if (existing) {
         // Si alguna línea la marca como buena, prevalece.
         existing.bad &&= move.bad
+        if (!existing.lines.includes(line.name)) existing.lines.push(line.name)
       } else {
         node.moves.push({
           san: move.san,
@@ -129,6 +132,7 @@ export function buildTree(opening: Opening): OpeningTree {
           nextFen: chess.fen(),
           lineName: line.name,
           lineNote: line.note,
+          lines: [line.name],
         })
       }
 

@@ -4,6 +4,8 @@ App para practicar aperturas de ajedrez desde la compu o el celular.
 
 - **Ejercicios**: una posición de teoría y tenés que encontrar la jugada de libro. Se pueden filtrar por bando (Blancas / Negras / Ambos) y por estado (Todos / Pendientes / Fallados). Los fallados aparecen más seguido.
 - **Líneas completas**: jugás una variante entera de memoria; la computadora mueve el otro bando.
+- **Jugar**: partidas contra un rival que conoce la teoría y elige una variante distinta cada vez; la partida termina al llegar al medio juego.
+- **Videos**: lecciones animadas con voz en español (general, cortos y uno por cada línea).
 
 El progreso se guarda en el navegador de cada dispositivo.
 
