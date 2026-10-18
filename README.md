@@ -25,9 +25,6 @@ npm install
 npm run dev
 ```
 
-## Publicar en Vercel
+## Publicar
 
-```bash
-npx vercel login
-npx vercel --prod
-```
+El repo está conectado a GitHub y Vercel: cada `git push` a `main` publica la app sola en https://aperturas-ajedrez.vercel.app.
