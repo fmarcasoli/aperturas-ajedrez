@@ -207,3 +207,12 @@ h1, h2 { margin: 0; line-height: 1.2; }
 .video-settings select {
   background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; max-width: 220px;
 }
+.section-title { font-size: 0.95rem; margin: 10px 0 0; }
+.lesson-list.compact button { padding: 8px 10px; }
+.lesson-list.compact .lesson-play { width: 30px; height: 30px; font-size: 0.8rem; }
+.line-row { display: flex; gap: 6px; }
+.line-row > button:first-child { flex: 1; min-width: 0; }
+.line-list .video-btn {
+  flex: none; width: 46px; border-radius: 10px; border: 1px solid transparent; background: var(--surface-2); font-size: 1.1rem;
+}
+.line-list .video-btn:hover { border-color: var(--accent); }

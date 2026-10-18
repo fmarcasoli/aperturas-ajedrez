@@ -75,7 +75,7 @@ export const positionKey = (fen: string) => fen.split(' ').slice(0, 4).join(' ')
 /** id de estadísticas de una posición. */
 export const exerciseId = (openingId: string, key: string) => `${openingId}:${key}`
 
-function commonPrefixLength(lines: ParsedMove[][]): number {
+export function commonPrefixLength(lines: ParsedMove[][]): number {
   let n = 0
   for (;;) {
     const san = lines[0][n]?.san

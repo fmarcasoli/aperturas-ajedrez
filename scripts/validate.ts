@@ -3,6 +3,9 @@ import { openings } from '../src/data/openings.ts'
 import { buildExercises } from '../src/lib/exercises.ts'
 import { intro, lessonsByOpening } from '../src/data/lessons/index.ts'
 import { buildFrames, estimateSeconds } from '../src/lib/lessonFrames.ts'
+import { lineLessons, moveLabel } from '../src/lib/lineLessons.ts'
+import { lineComments } from '../src/data/lineComments/index.ts'
+import { parseMoves as pm } from '../src/lib/exercises.ts'
 
 let bad = 0
 for (const o of openings) {
@@ -35,5 +38,25 @@ for (const lesson of [intro, ...Object.values(lessonsByOpening).flat()]) {
   }
 }
 for (const o of openings) if (!lessonsByOpening[o.id]?.length) console.log(`SIN LECCIONES: ${o.id}`)
+// Comentarios de los videos por línea: cada clave tiene que existir.
+let lineSecs = 0
+let commented = 0
+let totalLines = 0
+for (const o of openings) {
+  const byName = lineComments[o.id] ?? {}
+  for (const name of Object.keys(byName)) if (name !== '*' && !o.lines.some((l) => l.name === name)) { console.log(`COMENTARIO línea inexistente [${o.id}] ${name}`); bad++ }
+  for (const l of o.lines) {
+    totalLines++
+    const c = byName[l.name]
+    if (!c) continue
+    commented++
+    const labels = new Set(pm(l.moves).map((m, i) => moveLabel(i, m.san)))
+    for (const k of Object.keys(c)) if (k !== 'intro' && k !== 'outro' && !labels.has(k)) { console.log(`COMENTARIO jugada inexistente [${o.id}] ${l.name}: ${k}`); bad++ }
+  }
+  for (const lesson of lineLessons(o)) {
+    try { buildFrames(lesson); lineSecs += estimateSeconds(lesson) } catch (e) { console.log(`VIDEO LÍNEA ${lesson.id}: ${(e as Error).message}`); bad++ }
+  }
+}
+console.log(`videos por línea: ${totalLines} (${commented} con explicaciones), ~${Math.round(lineSecs / 60)} min`)
 console.log(`lecciones: ${1 + Object.values(lessonsByOpening).flat().length}, ~${Math.round(secs / 60)} min`)
 process.exit(bad ? 1 : 0)

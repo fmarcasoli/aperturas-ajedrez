@@ -9,9 +9,10 @@ interface Props {
   opening: Opening
   linesDone: Record<string, number>
   onComplete: (lineId: string) => void
+  onVideo: (lineId: string) => void
 }
 
-export function LineMode({ opening, linesDone, onComplete }: Props) {
+export function LineMode({ opening, linesDone, onComplete, onVideo }: Props) {
   const lines = useMemo(() => getLines(opening), [opening])
   const [side, setSide] = useState<Color>(opening.side)
   const [line, setLine] = useState<ParsedLine | null>(null)
@@ -34,13 +35,16 @@ export function LineMode({ opening, linesDone, onComplete }: Props) {
         <p className="small muted">Jugá la línea completa: la computadora mueve el otro bando y vos tenés que recordar cada jugada.</p>
         <ul className="line-list">
           {lines.map((l) => (
-            <li key={l.id}>
+            <li key={l.id} className="line-row">
               <button onClick={() => setLine(l)}>
                 <span className="line-name">{l.name}</span>
                 <span className="line-meta">
                   {Math.ceil(l.moves.length / 2)} jugadas
                   {linesDone[l.id] ? <span className="check"> ✓ {linesDone[l.id]}</span> : null}
                 </span>
+              </button>
+              <button className="video-btn" onClick={() => onVideo(l.id)} aria-label={`Video de ${l.name}`} title="Ver video de esta línea">
+                🎬
               </button>
             </li>
           ))}

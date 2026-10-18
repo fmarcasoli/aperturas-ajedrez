@@ -29,45 +29,66 @@ function markSeen(id: string) {
   }
 }
 
-export function LessonsTab({ lessons }: { lessons: Lesson[] }) {
-  const [current, setCurrent] = useState<number | null>(null)
+interface TabProps {
+  lessons: Lesson[]
+  lineLessons: Lesson[]
+  initialId?: string
+  onOpen?: (id: string | null) => void
+}
+
+export function LessonsTab({ lessons, lineLessons, initialId, onOpen }: TabProps) {
+  const all = useMemo(() => [...lessons, ...lineLessons], [lessons, lineLessons])
+  const found = initialId ? all.findIndex((l) => l.id === initialId) : -1
+  const [current, setCurrent] = useState<number | null>(found >= 0 ? found : null)
   const [seen, setSeen] = useState(loadSeen)
 
+  const open = (i: number | null) => {
+    setCurrent(i)
+    onOpen?.(i === null ? null : all[i].id)
+    window.scrollTo(0, 0)
+  }
+
   if (current !== null) {
-    const lesson = lessons[current]
+    const lesson = all[current]
     return (
       <LessonPlayer
         key={lesson.id}
         lesson={lesson}
         onBack={() => {
           setSeen(loadSeen())
-          setCurrent(null)
+          open(null)
         }}
-        next={current + 1 < lessons.length ? { title: lessons[current + 1].title, go: () => setCurrent(current + 1) } : undefined}
+        next={current + 1 < all.length ? { title: all[current + 1].title, go: () => open(current + 1) } : undefined}
       />
     )
   }
 
+  const item = (l: Lesson, i: number, kind: string) => (
+    <li key={l.id}>
+      <button onClick={() => open(i)}>
+        <span className="lesson-play">▶</span>
+        <span className="lesson-info">
+          <span className="lesson-kind">{kind} · {minutes(l)}</span>
+          <span className="line-name">{l.title}</span>
+          {kind !== 'Línea' && <span className="small muted">{l.summary}</span>}
+        </span>
+        {seen[l.id] && <span className="check">✓</span>}
+      </button>
+    </li>
+  )
+
   return (
     <div className="panel">
       <p className="small muted">
-        Lecciones animadas con voz: mirá primero el video general y después los cortos. Funcionan mejor con el sonido activado.
+        Lecciones animadas con voz: mirá primero el video general, después los cortos y por último el video de cada línea. Funcionan mejor con el sonido activado.
       </p>
-      <ul className="lesson-list">
-        {lessons.map((l, i) => (
-          <li key={l.id}>
-            <button onClick={() => setCurrent(i)}>
-              <span className="lesson-play">▶</span>
-              <span className="lesson-info">
-                <span className="lesson-kind">{i === 0 ? 'Video general' : 'Video corto'} · {minutes(l)}</span>
-                <span className="line-name">{l.title}</span>
-                <span className="small muted">{l.summary}</span>
-              </span>
-              {seen[l.id] && <span className="check">✓</span>}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <ul className="lesson-list">{lessons.map((l, i) => item(l, i, i === 0 ? 'Video general' : 'Video corto'))}</ul>
+      {lineLessons.length > 0 && (
+        <>
+          <h3 className="section-title">Un video por cada línea ({lineLessons.length})</h3>
+          <ul className="lesson-list compact">{lineLessons.map((l, i) => item(l, lessons.length + i, 'Línea'))}</ul>
+        </>
+      )}
     </div>
   )
 }

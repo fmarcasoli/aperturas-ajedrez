@@ -6,12 +6,17 @@ import { ExerciseMode } from './components/ExerciseMode.tsx'
 import { LineMode } from './components/LineMode.tsx'
 import { LessonPlayer, LessonsTab } from './components/Lessons.tsx'
 import { intro, lessonsByOpening } from './data/lessons/index.ts'
+import { lineLessons } from './lib/lineLessons.ts'
 
 type Mode = 'ejercicios' | 'lineas' | 'videos'
 
-function parseHash(): { id?: string; mode: Mode } {
-  const [, id, mode] = window.location.hash.replace(/^#\/?/, '/').split('/')
-  return { id: id || undefined, mode: mode === 'lineas' || mode === 'videos' ? mode : 'ejercicios' }
+function parseHash(): { id?: string; mode: Mode; lesson?: string } {
+  const [, id, mode, lesson] = window.location.hash.replace(/^#\/?/, '/').split('/')
+  return {
+    id: id || undefined,
+    mode: mode === 'lineas' || mode === 'videos' ? mode : 'ejercicios',
+    lesson: lesson ? decodeURIComponent(lesson) : undefined,
+  }
 }
 
 export default function App() {
@@ -74,9 +79,24 @@ export default function App() {
           <ExerciseMode key={opening.id} opening={opening} stats={progress.exercises} onRecord={recordExercise} />
         )}
         {route.mode === 'lineas' && (
-          <LineMode key={opening.id} opening={opening} linesDone={progress.lines} onComplete={recordLine} />
+          <LineMode
+            key={opening.id}
+            opening={opening}
+            linesDone={progress.lines}
+            onComplete={recordLine}
+            onVideo={(lineId) => {
+              window.location.hash = `/${opening.id}/videos/${encodeURIComponent(`linea:${lineId}`)}`
+            }}
+          />
         )}
-        {route.mode === 'videos' && <LessonsTab key={opening.id} lessons={lessonsByOpening[opening.id] ?? []} />}
+        {route.mode === 'videos' && (
+          <LessonsTab
+            key={`${opening.id}-${route.lesson ?? ''}`}
+            lessons={lessonsByOpening[opening.id] ?? []}
+            lineLessons={lineLessons(opening)}
+            initialId={route.lesson}
+          />
+        )}
       </main>
       <footer className="foot">
         <button
