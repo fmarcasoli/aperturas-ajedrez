@@ -8,7 +8,11 @@ export type Comment = string | { say: string; arrows?: string; marks?: string }
 export type LineComments = Record<string, Record<string, Comment>>
 
 import { italiana } from './italiana.ts'
+import { dosCaballos } from './dosCaballos.ts'
+import { evans } from './evans.ts'
 
 export const lineComments: Record<string, LineComments> = {
   italiana,
+  'dos-caballos': dosCaballos,
+  evans,
 }
